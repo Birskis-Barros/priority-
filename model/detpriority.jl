@@ -1,11 +1,12 @@
 #RUN REMOTELY
-if homedir() == "/home/z840"
-    loadfunc = include("$(homedir())/2018_discrete_enigma/model/src/loadfuncs.jl");
+#RUN REMOTELY
+if homedir() == "/home/irinabarros"
+    loadfunc = include("$(homedir())/Documents/src/loadfuncs.jl");
 else
-    loadfunc = include("$(homedir())/Dropbox/PostDoc/2018_discrete_enigma/model/src/loadfuncs.jl");
+    loadfunc = include("$(homedir())/Dropbox/PostDoc/2014_Lego/Enigma/src/loadfuncs.jl");
 end
 
-
+# testing git 
 # RUN LOCALLY
 using Distributed
 @everywhere using Combinatorics
@@ -17,6 +18,7 @@ using Distributed
 @everywhere using SpecialFunctions
 @everywhere using LightGraphs
 @everywhere using RCall
+@everywhere using SparseArrays
 # @everywhere using HDF5
 @everywhere using JLD
 
@@ -33,7 +35,7 @@ p_a=0.3
 lambda = 0.0;
 
 
-reps = 20;
+reps = 5;
 #length of connected states
 lcs = SharedArray{Int64}(reps);
 #length of starting states
@@ -62,7 +64,7 @@ library(RColorBrewer)
 pal <- brewer.pal(3,"Set1")
 fw_g <- graph.adjacency($(Array(transmconnected)));
 coords <- layout_(fw_g, with_kk())
-plot(fw_g,layout=coords,vertex.size=2,edge.arrow.size=0.5,edge.color='#6495ED',vertex.label=$connectedstates,vertex.frame.color=NA) 
+plot(fw_g,layout=coords,vertex.size=2,edge.arrow.size=0.5,edge.color='#6495ED',vertex.label=$connectedstates,vertex.frame.color=NA)
 #dev.off()
 """
 
