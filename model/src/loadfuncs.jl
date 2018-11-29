@@ -16,13 +16,11 @@ using DataFrames
 
 if homedir() == "/home/irinabarros"
 
-#deu certo? 
-
     #Interaction matrix
-    @everywhere include("$(homedir())/Documents/src/intmatrixv3.jl")
-    @everywhere include("$(homedir())/Documents/src/preamble_defs.jl")
-    @everywhere include("$(homedir())/Documents/src/assemblystate.jl")
-    @everywhere include("$(homedir())/Documents/src/potcol.jl")
+    @everywhere include("$(homedir())/priority-/model/src/intmatrixv3.jl")
+    @everywhere include("$(homedir())/priority-/model/src/preamble_defs.jl")
+    @everywhere include("$(homedir())/priority-/model/src/assemblystate.jl")
+    @everywhere include("$(homedir())/priority-/model/src/potcol.jl")
 
 
 else
