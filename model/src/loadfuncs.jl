@@ -21,6 +21,7 @@ if homedir() == "/home/irinabarros"
     @everywhere include("$(homedir())/priority-/model/src/preamble_defs.jl")
     @everywhere include("$(homedir())/priority-/model/src/assemblystate.jl")
     @everywhere include("$(homedir())/priority-/model/src/potcol.jl")
+    @everywhere include("$(homedir())/priority-/model/src/smartpath.jl")
 
 
 else
@@ -31,4 +32,5 @@ else
     @everywhere include("$(homedir())/Dropbox/2018_discrete_enigma/model/src/preamble_defs.jl")
     @everywhere include("$(homedir())/Dropbox/2018_discrete_enigma/model/src/assemblystate.jl")
     @everywhere include("$(homedir())/Dropbox/2018_discrete_enigma/model/src/potcol.jl")
+    @everywhere include("$(homedir())/Dropbox/2018_discrete_enigma/model/src/smartpath.jl")
 end
