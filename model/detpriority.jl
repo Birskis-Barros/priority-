@@ -1,14 +1,13 @@
 #RUN REMOTELY
 #RUN REMOTELY
 if homedir() == "/home/irinabarros"
-    loadfunc = include("$(homedir())/Documents/src/loadfuncs.jl");
+    loadfunc = include("$(homedir())/priority-/model/src/loadfuncs.jl");
 else
     loadfunc = include("$(homedir())/Dropbox/PostDoc/2014_Lego/Enigma/src/loadfuncs.jl");
 end
 
-# testing git 
 # RUN LOCALLY
-using Distributed
+@everywhere using Distributed
 @everywhere using Combinatorics
 @everywhere using LinearAlgebra
 # @everywhere using Distributed
