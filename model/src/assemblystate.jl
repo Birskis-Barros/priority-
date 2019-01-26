@@ -1,3 +1,4 @@
+#Testando
 function assemblystate(S,probs,lambda)
 
 
@@ -16,7 +17,7 @@ function assemblystate(S,probs,lambda)
     N = size(int_m)[1];
 
     #Define all possible states
-    states = collect(combinations(collect(1:N))); #todas as combinacoes de S
+    states = collect(combinations(collect(1:N))); #todas as combinacoes de S (análise combinatória)
     states = states[N+1:length(states)]; #retirando espécies sozinhas (sem sol)
     states = states[in.(1,states)];#retirando todos os conjuntos que não tem sol
     #how many states
@@ -37,7 +38,7 @@ function assemblystate(S,probs,lambda)
         end
 
         #NOTE: take out states without complete set of species/object pairs
-        observedspecies = speciesobjects[speciesobjects .<= S];
+        observedspecies = speciesobjects[speciesobjects .<= S]; #se for maior que S é pq é objeto
         expectedobjects = findall(!iszero,vec(sum(m_b[observedspecies,:],dims=1)));
 
         observedobjects = setdiff(speciesobjects,observedspecies);
@@ -62,7 +63,7 @@ function assemblystate(S,probs,lambda)
         # print(string(i,'_'))
         statei = copy(possiblestates[i]);
         deleteat!(statei,1)
-        colonizers = potcol(sp_v,int_id,statei,a_b,n_b0,0,1); #problema
+        colonizers = potcol(sp_v,int_id,statei,a_b,n_b0,0,1);
         # newstates = Array{Array}(undef,length(colonizers));
         newstatesloc = Array{Int64}(undef,length(colonizers));
         for j=1:length(colonizers)
