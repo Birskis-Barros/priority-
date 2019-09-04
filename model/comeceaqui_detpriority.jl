@@ -1,37 +1,36 @@
 #RUN REMOTELY
-#RUN REMOTELY
-if homedir() == "/home/irinabarros"
-    loadfunc = include("$(homedir())/priority-/model/src/loadfuncs.jl");
-else
-    loadfunc = include("$(homedir())/Dropbox/PostDoc/2014_Lego/Enigma/src/loadfuncs.jl");
-end
+if homedir() == "/Users/irinabb/"
+    loadfunc = include("$(homedir())/Dropbox/PhD/ENIgMA/src/loadfuncs.jl");
+    end
+#else # when working in a different computer
+#    loadfunc = include("$(homedir())/Dropbox/PostDoc/2014_Lego/Enigma/src/loadfuncs.jl");
+#end
 
-# RUN LOCALLY
-@everywhere using Distributed
-@everywhere using Combinatorics
-@everywhere using LinearAlgebra
-# @everywhere using Distributed
-@everywhere using SharedArrays
-@everywhere using SparseArrays
-@everywhere using Distributions
-@everywhere using SpecialFunctions
-@everywhere using LightGraphs
-@everywhere using RCall
-@everywhere using SparseArrays
-# @everywhere using HDF5
-@everywhere using JLD
+# loadfunc = include("$(homedir())/Dropbox/PostDoc/2014_Lego/Enigma/src/loadfuncs.jl");
 
-S = 15;
 
-# S = 400;
-pr = (
+S = 5;
+probs = (
 p_n=0.1,
 p_a=0.3
 # p_n = 0.02,
 # p_a = 0.02
 );
 #expected objects per species
-lambda = 0.0;
+lambda = 0.0  ;
+
+MaxN = convert(Int64,floor(S + S*lambda));
+
+int_m, tp_m, tind_m, mp_m, mind_m = intmatrixv3(S,lambda,probs);
+
+a_b,
+n_b,
+i_b,
+m_b,
+n_b0,
+sp_v,
+int_id = preamble_defs(int_m);
+
 
 
 reps = 5;

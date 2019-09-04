@@ -3,8 +3,8 @@ function potcol(sp_v,int_id,cid,a_b,n_b0,athresh,nthresh)
     spcid = intersect(sp_v,cid);
     #Which are objects?
     ocid = setdiff(cid,spcid);
-    
-    
+
+
     #COUNT POTENTIAL COLONIZERS
     trophiclinked = setdiff(int_id[(vec(sum(a_b[:,[1;cid]],dims=2)) .> 0)[:,1]],cid);
     #For each trophiclinked, count number of assimilate and need interactions in system
@@ -21,6 +21,6 @@ function potcol(sp_v,int_id,cid,a_b,n_b0,athresh,nthresh)
     col = intersect(a_pass,n_pass);
     #Count the number that pass
     lcol = length(col);
-    
-    return col
+
+    return lcol
 end

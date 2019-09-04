@@ -1,10 +1,9 @@
-#Testando
 function assemblystate(S,probs,lambda)
 
 
     MaxN = convert(Int64,floor(S + S*lambda));
 
-    int_m, tp_m, tind_m, mp_m, mind_m = intmatrixv3(S,lambda,pr);
+    int_m, tp_m, tind_m, mp_m, mind_m = intmatrixv3(S,lambda,probs);
 
     a_b,
     n_b,
@@ -66,10 +65,10 @@ function assemblystate(S,probs,lambda)
         colonizers = potcol(sp_v,int_id,statei,a_b,n_b0,0,1);
         # newstates = Array{Array}(undef,length(colonizers));
         newstatesloc = Array{Int64}(undef,length(colonizers));
-        for j=1:length(colonizers)
+          for j=1:length(colonizers)
             newstates = sort([1;statei;colonizers[j]]);
-            newstatesloc[j] = findall(x->x==newstates,possiblestates)[1];
-        end
+            newstatesloc[j] = findall(x->x == newstates,possiblestates)[1];
+            end
         transm[i,newstatesloc] .= 1.0;
     end
 
@@ -81,6 +80,7 @@ function assemblystate(S,probs,lambda)
         tokeep = findall(x->x<(S+1),paths);
         trimlist[tokeep,i] .= 1;
     end
+
     connectedstates = findall(!iszero,vec(sum(trimlist,dims=2)));
     transmconnected = transm[connectedstates,connectedstates];
     lstateconnected = length(connectedstates);

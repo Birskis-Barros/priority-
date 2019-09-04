@@ -1,37 +1,38 @@
-function intmatrixv3(S, lambda, probs)
+function intmatrixv3(S, O, probs)
     
     #NOTE In this version, interactions are randomly assigned and there is no inputted distribution for trophic or need interactions
     
-    p_n=probs.p_n;
-    p_a=probs.p_a;
+    p_n=copy(probs[1]);
+    p_a=copy(probs[2]);
     # p_i=copy(probs[3]);
     #Defining paiwise probabilities
     #These are probabilities of pairwise interactions within the whole universe of possible interactions (15)
 
     
     
-    #Draw the number of objects made per species
-    #Done many times, the mean will be lambda*S
-    #A species is an engineer if number of objects > 0
-    pdist = Poisson(lambda);
-    OpS = rand(pdist,S-1);
-    OpS = [0;OpS]; # basal resource does not make anything
-    engind = findall(!iszero,OpS);
-    E = length(engind);
-    
+    # #Draw the number of objects made per species
+    # #Done many times, the mean will be lambda*S
+    # #A species is an engineer if number of objects > 0
+    # pdist = Poisson(lambda);
+    # OpS = rand(pdist,S-1);
+    # OpS = [0;OpS]; # basal resource does not make anything
+    # engind = find(!iszero,OpS);
+    # E = length(engind);
+    # 
     #Some of these objects may not be unique
     obline = collect(1:sum(OpS));
     obindpS = zeros(Int64,E,sum(OpS));
     for i = 1:E
         o = sample(obline,OpS[engind][i],replace=false);
-        obindpS[i,o] .= 1;
+        obindpS[i,o] = 1;
     end
-    
-    obindpS = obindpS[:,findall(!iszero,vec(sum(obindpS,dims=1)))];
-    O = size(obindpS)[2];
-    
+    # 
+    # obindpS = obindpS[:,find(!iszero,sum(obindpS,1))];
+    # O = size(obindpS)[2];
+    # 
     #Expected size of the system
     # O = convert(Int64,round(lambda*S,0));
+    
     N = S + O;
     spind = collect(1:S);
     obind = collect(S+1:N);
@@ -43,23 +44,23 @@ function intmatrixv3(S, lambda, probs)
     
     # exp_p_m = S*lambda/((S + S*lambda*(1-exp(-1)))^2)
     
-    pwp = (
-      na = p_n*(p_a/(p_a+p_n+p_i+p_m)) + p_a*(p_n/(p_a+p_i+p_n)),
-      nn = p_n*(p_n/(p_a+p_n+p_i+p_m)),
-      ni = p_n*(p_i/(p_a+p_n+p_i+p_m)) + p_i*(p_n/(p_a+p_n+p_i)),
-      nm = p_n*(p_m/(p_a+p_n+p_i+p_m)) + p_m*1, #(p_n/p_n),
-      ia = p_i*(p_a/(p_a+p_n+p_i)) + p_a*(p_i/(p_a+p_i+p_n)),
-      ii = p_i*(p_i/(p_a+p_n+p_i)),
-      aa = p_a*(p_a/(p_i+p_n+p_a))
-    );
+    pw_prob_init = [
+      pr_na = p_n*(p_a/(p_a+p_n+p_i+p_m)) + p_a*(p_n/(p_a+p_i+p_n)),
+      pr_nn = p_n*(p_n/(p_a+p_n+p_i+p_m)),
+      pr_ni = p_n*(p_i/(p_a+p_n+p_i+p_m)) + p_i*(p_n/(p_a+p_n+p_i)),
+      pr_nm = p_n*(p_m/(p_a+p_n+p_i+p_m)) + p_m*1, #(p_n/p_n),
+      pr_ia = p_i*(p_a/(p_a+p_n+p_i)) + p_a*(p_i/(p_a+p_i+p_n)),
+      pr_ii = p_i*(p_i/(p_a+p_n+p_i)),
+      pr_aa = p_a*(p_a/(p_i+p_n+p_a))
+    ];
 
     #Create an empty character array with dimensions equal to the number of players
     #Region 1) Upper left SxS are species-species interactions
     #Region 2) Upper right SxO are species-object interactions
     #Region 3) Lower left OxS are object-species interacions (n only)
     #Region 4) Lower right OxO are object-object interactions (i only)
-    int_m = Array{Char}(undef,N,N);
-    int_m .= Ref('0');
+    int_m = Array{Char}(N,N);
+    int_m[:] = '0';
     
     #Assign the make-need interactions
     #Maybe faster way to do this?
@@ -90,12 +91,12 @@ function intmatrixv3(S, lambda, probs)
     #Indices S+1:N are objects ('i')
     diagindices = diagind(int_m);
 
-    int_m[diagindices[2:S]] .= Ref('n');
+    int_m[diagindices[2:S]] = 'n';
 
     #Deal with the basal resource
-    int_m[1,:] .= Ref('i');
-    tp_m[1,:] .= 0;
-    int_m[findall(x->x=='0',int_m[:,1]),1] .= Ref('i');
+    int_m[1,:] = 'i';
+    tp_m[1,:] = 0;
+    int_m[find(x->x=='0',int_m[:,1]),1] = 'i';
 
     
     #NOTE: Interactions BETWEEN SPECIES
@@ -110,8 +111,7 @@ function intmatrixv3(S, lambda, probs)
     # 6) pr_ii **
     # 7) pr_aa
     # deleteat!(pw_prob_new,[1,4,5,7])
-    # pw_prob_new = pw_prob_init[[1,2,3,5,6,7]];
-    pw_prob_new = [pwp.na,pwp.nn,pwp.ni,pwp.ia,pwp.ii,pwp.aa];
+    pw_prob_new = pw_prob_init[[1,2,3,5,6,7]];
     pw_prob_new = pw_prob_new/sum(pw_prob_new);
 
 
@@ -201,10 +201,10 @@ function intmatrixv3(S, lambda, probs)
     end #i
     
     #We could assume that any species without recorded trophic interactions is a primary producer
-    total_trophic = vec(sum(tp_m,dims=2));
-    prim_prod = deleteat!(findall(iszero,total_trophic),1); #eliminate row 1
-    int_m[prim_prod,1] .= Ref('a');
-    tp_m[prim_prod,1] .= 1;
+    total_trophic = sum(tp_m,2);
+    prim_prod = deleteat!(find(iszero,total_trophic),1); #eliminate row 1
+    int_m[prim_prod,1] = 'a';
+    tp_m[prim_prod,1] = 1;
     
     #SPECIES-OBJECT INTERACTIONS
     
@@ -216,8 +216,7 @@ function intmatrixv3(S, lambda, probs)
     # 6) pr_ii **
     # 7) pr_aa
 
-    # so_pw_prob = pw_prob_init[[3,5,6]];
-    so_pw_prob = [pwp.ni,pwp.ia,pwp.ii];
+    so_pw_prob = pw_prob_init[[3,5,6]];
     so_pw_prob = so_pw_prob/sum(so_pw_prob);
     so_prob_line = cumsum(so_pw_prob);
     
@@ -247,7 +246,7 @@ function intmatrixv3(S, lambda, probs)
         end
     end
     #All object-object interactions are 'i-i'
-    int_m[obind,obind] .= Ref('i');
+    int_m[obind,obind] = 'i';
     
     #A matrix for Direct + Indirect trophic interactions
     tind_m = copy(tp_m);
@@ -255,24 +254,24 @@ function intmatrixv3(S, lambda, probs)
     mind_m = copy(mp_m);
 
     #All object-object interactions are 'i-i'
-    int_m[obind,obind] .= Ref('i');
+    int_m[obind,obind] = 'i';
     
     #Force Basal primary producer (Row/Col 2) to not 'need' anything
-    colonizer_n = deleteat!(findall(x->x=='n',int_m[2,:]),1);
+    colonizer_n = deleteat!(find(x->x=='n',int_m[2,:]),1);
     
-    int_m[2,colonizer_n] .= Ref('i');
-    mp_m[2,:] .= 0;
+    int_m[2,colonizer_n] = 'i';
+    mp_m[2,:] = 0;
     
     #Document the indirect interactions
     for i=2:S
         for j=1:O
             if int_m[spind[i],obind[j]] == 'a'
-                makers = findall(x->x=='m',int_m[:,obind[j]]);
-                tind_m[spind[i],makers] .= 1;
+                makers = find(x->x=='m',int_m[:,obind[j]]);
+                tind_m[spind[i],makers] = 1;
             end
             if int_m[spind[i],obind[j]] == 'n'
-                makers = findall(x->x=='m',int_m[:,obind[j]]);
-                mind_m[spind[i],makers] .= 1;
+                makers = find(x->x=='m',int_m[:,obind[j]]);
+                mind_m[spind[i],makers] = 1;
             end
         end
     end
