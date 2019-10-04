@@ -49,7 +49,13 @@ function assemblystate(S,probs,lambda)
             passtest[i] *= 0;
         end
 
-
+        #NOTE: I need to check the need interactions too:
+          ## AINDA preciso fazer rodar
+        for l=1:length(statei)
+        needs[l] = findall(x->x!=0, n_b0)
+        setdiff[statei,need ]
+        if length(setdiff) == 0 => passa no teste
+        if length(setdiff) != 0 => fail 
     end
 
     possiblestates = states[findall(!iszero,passtest)];
