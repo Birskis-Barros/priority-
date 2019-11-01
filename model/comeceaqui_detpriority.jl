@@ -1,6 +1,6 @@
 #RUN REMOTELY
 if homedir() == "/Users/irinabb/"
-    loadfunc = include("$(homedir())/Dropbox/PhD/ENIgMA/src/loadfuncs.jl");
+    loadfunc = include("$(homedir())/Dropbox/PhD/ENIgMA/model/loadfuncs.jl");
     end
 #else # when working in a different computer
 #    loadfunc = include("$(homedir())/Dropbox/PostDoc/2014_Lego/Enigma/src/loadfuncs.jl");

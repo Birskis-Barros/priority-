@@ -25,6 +25,8 @@ function assemblystate(S,probs,lambda)
     #Determine impossible states
     passtest = zeros(Int64,nstates) .+ 1; #tem que cumprir algumas regras
     keepstates = Array{Int64}(undef,0);
+    needs = Array{Int64}(undef,0);
+
     for i=1:nstates
         speciesobjects = states[i];
         adjacencymatrix = a_b[speciesobjects,speciesobjects] .+ m_b[speciesobjects,speciesobjects]';
@@ -49,13 +51,15 @@ function assemblystate(S,probs,lambda)
             passtest[i] *= 0;
         end
 
-        #NOTE: I need to check the need interactions too:
-          ## AINDA preciso fazer rodar
-        for l=1:length(statei)
-        needs[l] = findall(x->x!=0, n_b0)
-        setdiff[statei,need ]
-        if length(setdiff) == 0 => passa no teste
-        if length(setdiff) != 0 => fail 
+      #NOTE: I need to check the needs interactions too: 
+           poolneeds = sum(n_b0[speciesobjects,:],dims=2)
+           comneeds = sum(n_b0[speciesobjects,speciesobjects],dims=2)
+           if poolneeds == comneeds
+           passtest[i] *= 1;
+           else
+           passtest[i] *= 0;
+           end
+
     end
 
     possiblestates = states[findall(!iszero,passtest)];
