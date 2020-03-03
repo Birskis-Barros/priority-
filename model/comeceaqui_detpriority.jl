@@ -1,3 +1,6 @@
+###teste github
+
+
 #RUN REMOTELY
 if homedir() == "/Users/irinabb/"
     loadfunc = include("$(homedir())/Dropbox/PhD/ENIgMA/model/loadfuncs.jl");

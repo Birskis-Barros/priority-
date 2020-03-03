@@ -51,7 +51,7 @@ function assemblystate(S,probs,lambda)
             passtest[i] *= 0;
         end
 
-      #NOTE: I need to check the needs interactions too: 
+      #NOTE: I need to check the needs interactions too:
            poolneeds = sum(n_b0[speciesobjects,:],dims=2)
            comneeds = sum(n_b0[speciesobjects,speciesobjects],dims=2)
            if poolneeds == comneeds
