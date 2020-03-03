@@ -1,5 +1,3 @@
-###teste github
-
 
 #RUN REMOTELY
 if homedir() == "/Users/irinabb/"
