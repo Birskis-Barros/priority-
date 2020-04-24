@@ -1,5 +1,23 @@
-function
-    
+loadfunc = include("$(homedir())/Dropbox/PhD/ENIgMA/model/loadfuncs.jl");
+
+using RCall
+
+
+numero_sp = [5:1:20;]; #number of species in the new community
+reps = 100 # number of repetitions
+result = zeros(reps, length(numero_sp));
+
+for s=1:length(numero_sp)
+for r=1:reps
+
+    S = numero_sp[s];
+    probs = (
+    p_n=0.1,
+    p_a=0.3
+    );
+    #expected objects per species
+    lambda = 0.0  ;
+
     MaxN = convert(Int64,floor(S + S*lambda));
 
     int_m, tp_m, tind_m, mp_m, mind_m = intmatrixv3(S,lambda,probs);
@@ -38,7 +56,7 @@ function
         end
 
         #NOTE: take out states without complete set of species/object pairs
-        observedspecies = speciesobjects[speciesobjects .<= S]; #se for maior que S é pq é objeto
+        observedspecies = speciesobjects[speciesobjects .<= S]; #if it's > than S, it's an object
         expectedobjects = findall(!iszero,vec(sum(m_b[observedspecies,:],dims=1)));
 
         observedobjects = setdiff(speciesobjects,observedspecies);
@@ -90,10 +108,25 @@ function
         trimlist[tokeep,i] .= 1;
     end
 
-    connectedstates = findall(!iszero,vec(sum(trimlist,dims=2)));
-    transmconnected = transm[connectedstates,connectedstates];
-    lstateconnected = length(connectedstates);
-
-    return(int_m,transmconnected,connectedstates,possiblestates)
+    result[r,s] = length(possiblestates);
 
 end
+end
+
+
+R"""
+
+library("ggplot2")
+library("reshape2")
+result = as.data.frame($(Array(result)))
+colnames(result) = (c("5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20"))
+teste = melt(result)
+
+ggplot(teste, aes(x=as.factor(variable), y=value)) +
+geom_point(mapping=aes(colour=variable), show.legend = FALSE) +
+ylim(0,2560) +
+xlab("Number of species") +
+ylab("Number of possible states") +
+theme_classic()
+
+"""

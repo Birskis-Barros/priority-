@@ -6,17 +6,19 @@
 @everywhere using JLD
 
 #Interaction matrix
-@everywhere include("$(homedir())/2014_Lego/Enigma/src/intmatrixv3.jl")
+@everywhere include("$(homedir())/Dropbox/PhD/ENIgMA/model/intmatrixv3.jl")
 
 #Community dynamics
-@everywhere include("$(homedir())/2014_Lego/Enigma/src/preamble_defs.jl")
-@everywhere include("$(homedir())/2014_Lego/Enigma/src/assembly.jl")
+@everywhere include("$(homedir())/Dropbox/PhD/ENIgMA/model/preamble_defs.jl")
+@everywhere include("$(homedir())/Dropbox/PhD/ENIgMA/model/assembly.jl")
 
 #Analysis Calculations
-@everywhere include("$(homedir())/2014_Lego/Enigma/src/structure.jl")
-@everywhere include("$(homedir())/2014_Lego/Enigma/src/dynstructure.jl")
+@everywhere include("$(homedir())/Dropbox/PhD/ENIgMA/model/structure.jl")
+@everywhere include("$(homedir())/Dropbox/PhD/ENIgMA/model/dynstructure.jl")
 
 #Analysis functions
-@everywhere include("$(homedir())/2014_Lego/Enigma/src/trophicalc2.jl")
-@everywhere include("$(homedir())/2014_Lego/Enigma/src/roverlap.jl")
-@everywhere include("$(homedir())/2014_Lego/Enigma/src/potcol.jl")
+@everywhere include("$(homedir())/Dropbox/PhD/ENIgMA/model/trophicalc2.jl")
+@everywhere include("$(homedir())/Dropbox/PhD/ENIgMA/model/roverlap.jl")
+@everywhere include("$(homedir())/Dropbox/PhD/ENIgMA/model/potcol.jl")
+
+@everywhere include("$(homedir())/Dropbox/PhD/ENIgMA/model/assemblystate.jl")

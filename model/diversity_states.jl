@@ -1,5 +1,5 @@
 
-S = 15;
+S = 20;
 probs = (
 p_n=0.05,
 p_a=0.3
@@ -108,7 +108,7 @@ for i=1:length(possiblestates)
   number_species[i] = length(possiblestates[i])
   end
 
-number_sps_state = zeros(Int64,length(unique(number_species)))
+number_sps_state = zeros(Int64,length(unique(number_species)));
 for i=1:length(unique(number_species))
   number_sps_state[i] = length(findall(x->x==unique(number_species)[i],number_species))
   end

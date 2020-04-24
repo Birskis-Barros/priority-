@@ -1,16 +1,7 @@
 
-#RUN REMOTELY
-if homedir() == "/Users/irinabb/"
-    loadfunc = include("$(homedir())/Dropbox/PhD/ENIgMA/model/loadfuncs.jl");
-    end
-#else # when working in a different computer
-#    loadfunc = include("$(homedir())/Dropbox/PostDoc/2014_Lego/Enigma/src/loadfuncs.jl");
-#end
+loadfunc = include("$(homedir())/Dropbox/PhD/ENIgMA/model/loadfuncs.jl");
 
-# loadfunc = include("$(homedir())/Dropbox/PostDoc/2014_Lego/Enigma/src/loadfuncs.jl");
-
-
-S = 5;
+S = 10;
 probs = (
 p_n=0.1,
 p_a=0.3
@@ -20,40 +11,27 @@ p_a=0.3
 #expected objects per species
 lambda = 0.0  ;
 
-MaxN = convert(Int64,floor(S + S*lambda));
 
-int_m, tp_m, tind_m, mp_m, mind_m = intmatrixv3(S,lambda,probs);
-
-a_b,
-n_b,
-i_b,
-m_b,
-n_b0,
-sp_v,
-int_id = preamble_defs(int_m);
-
-
-
-reps = 5;
-#length of connected states
-lcs = SharedArray{Int64}(reps);
-#length of starting states
-lss = SharedArray{Int64}(reps);
-#length of final states
-lfs = SharedArray{Int64}(reps);
-#connectance
-conn = SharedArray{Float64}(reps);
-
-@sync @distributed for r = 1:reps
-    int_m,transmconnected,connectedstates,possiblestates = assemblystate(S,pr,lambda);
-    g = DiGraph(transmconnected);
-    startingstates = connectedstates[findall(iszero,indegree(g))];
-    finalstates = connectedstates[findall(iszero,outdegree(g))];
-    lcs[r] = length(connectedstates);
-    lss[r] = length(startingstates);
-    lfs[r] = length(finalstates);
-    conn[r] = length(findall(x->x=='a',int_m))/(S^2);
-end
+# reps = 5;
+# #length of connected states
+# lcs = SharedArray{Int64}(reps);
+# #length of starting states
+# lss = SharedArray{Int64}(reps);
+# #length of final states
+# lfs = SharedArray{Int64}(reps);
+# #connectance
+# conn = SharedArray{Float64}(reps);
+#
+# @sync @distributed for r = 1:reps
+#     int_m,transmconnected,connectedstates,possiblestates = assemblystate(S,probs,lambda);
+#     g = DiGraph(transmconnected);
+#     startingstates = connectedstates[findall(iszero,indegree(g))];
+#     finalstates = connectedstates[findall(iszero,outdegree(g))];
+#     lcs[r] = length(connectedstates);
+#     lss[r] = length(startingstates);
+#     lfs[r] = length(finalstates);
+#     conn[r] = length(findall(x->x=='a',int_m))/(S^2);
+# end
 
 
 R"""
