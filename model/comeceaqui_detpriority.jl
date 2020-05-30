@@ -1,5 +1,5 @@
 
-loadfunc = include("$(homedir())/Dropbox/PhD/ENIgMA/model/loadfuncs.jl");
+loadfunc = include("$(homedir())/Dropbox/PhD/ENIgMA_Code/model/loadfuncs.jl");
 
 S = 10;
 probs = (

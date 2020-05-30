@@ -1,3 +1,4 @@
+loadfunc = include("$(homedir())/Dropbox/PhD/ENIgMA_Code/model/loadfuncs.jl");
 
 S = 20;
 probs = (
@@ -10,6 +11,8 @@ p_a=0.3
 lambda = 0.0  ;
 
 MaxN = convert(Int64,floor(S + S*lambda));
+
+for j=34:50
 
 int_m, tp_m, tind_m, mp_m, mind_m = intmatrixv3(S,lambda,probs);
 
@@ -113,12 +116,20 @@ for i=1:length(unique(number_species))
   number_sps_state[i] = length(findall(x->x==unique(number_species)[i],number_species))
   end
 
+  using RCall
+
   R"""
   richness_states = data.frame($number_sps_state)
   richness_states$number_species = unique($number_species)
-  library(ggplot2)
+  #library(ggplot2)
+
+  ggsave(file=sprintf("/Users/irinabarros/Dropbox/PhD/ENIgMa/Graphs/nspecies/plot_%s.pdf", ($(Int(j)))),
+       width = 6, height = 8,
+       plot = last_plot())
+
   ggplot(data=richness_states, aes(x=richness_states[,2], y=richness_states[,1]))+
 geom_point(alpha = 0.3, size=5) +
 theme_classic() +
  labs(x = "number of species in the state", y="number of states")
   """
+end
